@@ -2,14 +2,39 @@ package Dev_J_120;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
-
 
 public class SinglyLinkedList <T> implements Iterable<T> {
 
-    private Node first; //изначально null
-  
+    private Node first; 
+
+/*  перегруженный стандартный метод forEach, в который добавлен параметр T toElement
+    до совпадения с которым будет происходить перебор списка. 
+    */
+    public void forEach(T toElement, Consumer<? super T> action) {
+        Objects.requireNonNull(action);
+        for (T t : this) {
+            action.accept(t);
+            if(t.equals(toElement))
+                break;
+        }
+    }
+   /* перегруженный стандартный метод forEach, в который добавлен параметр T fromElement 
+    после совпадения с которым будет происходить заданное действие (список перебирается весь, 
+    но заданное действие происходит после совпадения элемента с параметром fromElement.  
+    */     
+     public void forEach(Consumer<? super T> action, T fromElement) {
+        Objects.requireNonNull(action);
+        boolean a = false;
+        for(T t : this){
+            if(t.equals(fromElement) == a) 
+                continue;
+            a = true;
+            action.accept(t);
+        }
+    }  
+    
     //Метод добавляет данные в начало списка.
     public void addFirst(T data) {
         Node newNode = new Node();
@@ -214,14 +239,6 @@ public class SinglyLinkedList <T> implements Iterable<T> {
     public Iterator iterator() {
         return new MyIterator<T>(first); 
     }
-    public void myForEach(T element, Consumer<T> c){
-        for(T t : this){  
-         c.accept(t);  
-            if(t.equals(element))
-                break;   
-        }
-    }
-
 
 // вложенный класс Node  в сущностях которого хранятся данные и ссылка на следующий узел.
     class Node <T> {
